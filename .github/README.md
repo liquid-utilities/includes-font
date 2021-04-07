@@ -1,4 +1,4 @@
-# Argument Parser
+# Includes Font
 [heading__top]:
   #includes-font
   "&#x2B06; Builds link elements for loading fonts in a respectful fashion"
@@ -7,7 +7,7 @@
 Builds link elements for loading fonts in a respectful fashion
 
 
-## [![Byte size of Argument Parser][badge__main__includes_font__source_code]][includes_font__main__source_code] [![Open Issues][badge__issues__includes_font]][issues__includes_font] [![Open Pull Requests][badge__pull_requests__includes_font]][pull_requests__includes_font] [![Latest commits][badge__commits__includes_font__main]][commits__includes_font__main]
+## [![Byte size of Includes Font][badge__main__includes_font__source_code]][includes_font__main__source_code] [![Open Issues][badge__issues__includes_font]][issues__includes_font] [![Open Pull Requests][badge__pull_requests__includes_font]][pull_requests__includes_font] [![Latest commits][badge__commits__includes_font__main]][commits__includes_font__main]
 
 
 ---
