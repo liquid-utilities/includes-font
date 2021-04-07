@@ -1,0 +1,8 @@
+[submodule "includes-picture"]
+	path = _includes/modules/modules/includes-picture
+	url = https://github.com/liquid-utilities/includes-picture.git
+	branch = main
+[submodule "includes-font"]
+	path = _includes/modules/includes-font
+	url = https://github.com/liquid-utilities/includes-font.git
+	branch = main
