@@ -1,0 +1,192 @@
+{% capture workspace__font %}
+{% comment %}
+---
+vim: filetype=liquid
+version: 0.0.1
+author: S0AndS0
+license: AGPL-3.0
+---
+
+
+## Example YAML/FrontMatter
+
+
+```yaml
+fonts_list:
+  - href: assets/fonts/custom-font.css
+    preconnect: /
+    filter: relative_url
+
+  - href: https://fonts.googleapis.com/css2?family=Merriweather&display=swap
+    preconnect: https://fonts.gstatic.com
+```
+
+
+## Example Layout
+
+
+**`_layouts/page.html` (snip)**
+
+
+```liquid
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% assign fonts_list = page.fonts_list
+                         | default: site.fonts_list
+                         | default: layout.fonts_list %}
+
+    {%- for font in fonts_list -%}
+      {% include _includes/modules/include-font/font.html
+                 href=font.href
+                 preconnect=font.preconnect
+                 filter=font.filter %}
+    {%- endfor -%}
+  </head>
+</html>
+```
+
+
+## Example Output
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preconnect"
+          href="/project-name"
+          crossorigin="anonymous" />
+
+    <link rel="preload"
+          as="style"
+          href="https://project-name.github.io/assets/fonts/custom-font.css" />
+
+    <link rel="stylesheet"
+          href="https://project-name.github.io/assets/fonts/custom-font.css"
+          media="print"
+          onload="this.media='all'" />
+
+    <noscript>
+      <link rel="stylesheet"
+            href="https://project-name.github.io/assets/fonts/custom-font.css" />
+    </noscript>
+
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin="anonymous" />
+
+    <link rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" />
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap"
+          media="print"
+          onload="this.media='all'" />
+
+    <noscript>
+      <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" />
+    </noscript>
+  </head>
+</html>
+```
+
+{% endcomment %}
+{% assign workspace__font__filter = include.filter | default: nil %}
+
+{% assign workspace__font__pre_connect = include.preconnect | default: nil %}
+{% if workspace__font__pre_connect %}
+  {% if workspace__font__filter == 'absolute_url' %}
+    {% assign workspace__font__pre_connect = workspace__font__pre_connect | absolute_url %}
+  {% elsif workspace__font__filter == 'relative_url' %}
+    {% assign workspace__font__pre_connect = workspace__font__pre_connect | relative_url %}
+  {% endif %}
+{% endif %}
+
+{% assign workspace__font__href = include.href %}
+{% if workspace__font__filter == 'absolute_url' %}
+  {% assign workspace__font__href = workspace__font__href | absolute_url %}
+{% elsif workspace__font__filter == 'relative_url' %}
+  {% assign workspace__font__href = workspace__font__href | relative_url %}
+{% endif %}
+
+
+{% assign workspace__font__link_list = '' | split: '' %}
+
+
+{% if workspace__font__pre_connect %}
+  {% if workspace__font__filter %}
+    {% capture workspace__font__item %}
+<link rel="preconnect" href="{{ workspace__font__pre_connect }}" />
+    {% endcapture %}
+  {% else %}
+    {% capture workspace__font__item %}
+<link rel="preconnect" href="{{ workspace__font__pre_connect }}" crossorigin="anonymous" />
+    {% endcapture %}
+  {% endif %}
+
+  {% assign workspace__font__item = workspace__font__item
+                                  | strip
+                                  | strip_newlines %}
+
+  {% assign workspace__font__link_list = workspace__font__link_list
+                                       | push: workspace__font__item %}
+
+  {% assign workspace__font__pre_connect = nil %}
+{% endif %}
+
+
+{% if workspace__font__href %}
+  {% capture workspace__font__item %}
+<link rel="preload" as="style" href="{{ workspace__font__href }}" />
+  {% endcapture %}
+  {% assign workspace__font__item = workspace__font__item
+                                  | strip
+                                  | strip_newlines %}
+
+  {% assign workspace__font__link_list = workspace__font__link_list
+                                       | push: workspace__font__item %}
+
+
+  {% capture workspace__font__item %}
+<link rel="stylesheet" href="{{ workspace__font__href }}" media="print" onload="this.media='all'" />
+{% endcapture %}
+  {% assign workspace__font__item = workspace__font__item
+                                  | strip
+                                  | strip_newlines %}
+
+  {% assign workspace__font__link_list = workspace__font__link_list | push: workspace__font__item %}
+
+
+  {% capture workspace__font__item %}
+<noscript>
+<link rel="stylesheet" href="{{ workspace__font__href }}" />
+</noscript>
+  {% endcapture %}
+  {% assign workspace__font__href = nil %}
+  {% assign workspace__font__item = workspace__font__item
+                                  | strip
+                                  | strip_newlines %}
+
+  {% assign workspace__font__link_list = workspace__font__link_list
+                                       | push: workspace__font__item %}
+{% endif %}
+
+
+{% assign workspace__font__list__size = workspace__font__link_list | size %}
+{% if workspace__font__list__size > 0 %}
+  {% assign workspace__font__output = workspace__font__link_list
+                                    | join: ''
+                                    | strip
+                                    | strip_newlines %}
+{% endif %}
+
+
+{% assign workspace__font__list__size = nil %}
+{% assign workspace__font__item = nil %}
+{% assign workspace__font__link_list = nil %}
+{% assign workspace__font__filter = nil %}
+{% endcapture %}{% if workspace__font__output %}{{ workspace__font__output }}{% endif %}{% assign workspace__font__output = nil %}{% assign workspace__font = nil %}
